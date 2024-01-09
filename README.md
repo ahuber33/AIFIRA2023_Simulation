@@ -11,14 +11,21 @@
 ```
 cmake -DGeant4_DIR=$G4COMP ../
 make -j4
-```  
-and compile it with make
+```
 
 - The executable AIFIRA2023Sim will be add to your bin folder
 
-- If you want to have a visualization, launch this command : '''./AIFIRA2023Sim [name of ROOT file ]'''. It will generate 1 particle according to the vis.mac with QT and you will have a ROOT file with the name you gave in response located in the Resultats folder.
+- If you want to have a visualization, launch this command : 
+```
+./AIFIRA2023Sim [name of ROOT file ]
+```  
+It will generate 1 particle according to the vis.mac with QT and you will have a ROOT file with the name you gave in response located in the Resultats folder.
 
-- If you want to have statistics without the visualization, use this command : '''./AIFIRA2023Sim [name of ROOT file] [number of events generated] [name of macro]'''. Personnaly, I used the vrml.mac but you can create another one. Just to remember that you need to write the name of your macro when you launch the simulation.
+- If you want to have statistics without the visualization, use this command : 
+```
+./AIFIRA2023Sim [name of ROOT file] [number of events generated] [name of macro]
+```  
+Personnaly, I used the vrml.mac but you can create another one. Just to remember that you need to write the name of your macro when you launch the simulation.
 
 - An AIFIRA2023Sim.cfg file is located in bin directory. All the dimensions necessary are in this file to avoid recompilation when you want to change some parameters. If you add some other dimensions, don't forget to add the variables in Geometry.cc.
 
