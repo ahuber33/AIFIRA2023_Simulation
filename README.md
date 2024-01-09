@@ -34,5 +34,5 @@ Personnaly, I used the vrml.mac but you can create another one. Just to remember
 - DO NOT HESITATE TO REPORT BUGS OR ANY IDEAS THAT WILL IMPROVE THE SIMULATION !!!!
 
 
-# Commit #1 le 09/01/2024 [AIFIRA2023Sim.0.1.0]
-## * Simulation issue de la version TP_Simulation.0.9.0 -> Commit initial avec changement des noms des fichiers et des variables
+## Commit #1 le 09/01/2024 [AIFIRA2023Sim.0.1.0]
+-  Simulation issue de la version TP_Simulation.0.9.0 -> Commit initial avec changement des noms des fichiers et des variables
