@@ -1,7 +1,7 @@
 # AIFIRA2023Sim for AIFIRA2023 Experiment [huber@cenbg.in2p3.fr, huberarnaud@gmail.com]
 
 # INSTRUCTIONS TO USE THE SIMULATION
-#- Download the VMWare [Geant4.11.0.2](#){https://heberge.lp2ib.in2p3.fr/G4VM/index.html}
+#- Download the VMWare Geant4.11.0.2 [Primary](https://heberge.lp2ib.in2p3.fr/G4VM/index.html){.btn .btn-primary}
 #- Copy all the files from AIFIRA2023_Simulation folder [ici] (https://github.com/ahuber33/AIFIRA2023_Simulation) !
 #- Create a build folder in the AIFIRA2023_Simulation folder and go inside.
 #- Use this command : '''cmake -DGeant4_DIR=$G4COMP ../''' and compile it with make
