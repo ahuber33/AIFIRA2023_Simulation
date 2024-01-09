@@ -7,7 +7,11 @@
 
 - Create a build folder in the AIFIRA2023_Simulation folder and go inside.
 
-- Use this command : '''cmake -DGeant4_DIR=$G4COMP ../''' and compile it with make
+- Use this command : 
+'''
+cmake -DGeant4_DIR=$G4COMP ../
+'''  
+and compile it with make
 
 - The executable AIFIRA2023Sim will be add to your bin folder
 
