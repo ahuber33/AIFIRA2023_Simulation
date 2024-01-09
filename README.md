@@ -10,6 +10,7 @@
 - Use this command : 
 ```
 cmake -DGeant4_DIR=$G4COMP ../
+make -j4
 ```  
 and compile it with make
 
