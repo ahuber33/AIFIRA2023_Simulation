@@ -144,15 +144,8 @@ private:
 
   G4double scintAbsorbconst;
   G4double scintIndexconst;
-  G4double scalingfactor_low;
-  G4double scalingfactor_high;
-  G4double pop_scalingfactor_low;
-  G4double pop_scalingfactor_high;
   G4double lightyield;
   G4double lightyieldZnS;
-  G4double lightyieldNoWaSH;
-  G4double paint_ref_coeff;
-  G4double mylar_ref_coeff;
   G4double pWavelength;
   G4double ratio;
   G4float Air_Index;
