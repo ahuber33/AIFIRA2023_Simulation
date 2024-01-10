@@ -100,38 +100,7 @@ AIFIRA2023SimSteppingAction::AIFIRA2023SimSteppingAction()
     //G4cout << "angle = " << angle/deg << G4endl;
     // G4cout << "Time = " << time << " ns" << G4endl;
 
-    if(partname=="opticalphoton" && VolumeNamePostStep == "Lens")
-    {
-      evtac->FillPhotonLensPositionX(x);
-      evtac->FillPhotonLensPositionY(y);
-      // G4cout << "Position X Lens = " << x << G4endl;
-      // G4cout << "Position Y Lens = " << y << G4endl;
-    }
-
-
-    if(partname=="opticalphoton" && VolumeNamePostStep == "Vacuum" && z >0)
-    {
-      if(VolumeNamePreStep == "Core_Fiber" || VolumeNamePreStep == "Inner_Cladding_Fiber" || VolumeNamePreStep == "Outer_Cladding_Fiber" || VolumeNamePreStep == "Holder_Fiber")
-      {
-        evtac->FillPhotonExitLightPositionX(x);
-        evtac->FillPhotonExitLightPositionY(y);
-        // G4cout << "Position X Exit Light = " << x << G4endl;
-        // G4cout << "Position Y Exit Light = " << y << G4endl;
-      }
-    }
-
-
-    if((partname=="opticalphoton" && aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Holder_Fiber")
-    && (evtac->GetAirIndex()<1))
-    {
-      G4MaterialPropertyVector* rindex= theTrack->GetVolume()->GetLogicalVolume()->GetMaterial()->GetMaterialPropertiesTable()->GetProperty("RINDEX");
-      G4float Index = (*rindex)[0];
-      //G4cout << "HOLDER Fiber " << G4endl;
-      //G4cout << "TEST = " <<  Index << G4endl;
-      evtac->SetAirIndex(Index);
-      //G4cout << "Test 2 =" << evtac->GetAirIndex() << G4endl;
-    }
-
+    
     if(StepNo==1 && partname == "opticalphoton")
     {
       //G4cout << "px = " << px << G4endl;
@@ -140,9 +109,7 @@ AIFIRA2023SimSteppingAction::AIFIRA2023SimSteppingAction()
       //G4cout << "ANGLE = " << angle/deg << G4endl;
       //evtac->FillFiberAngleCreation(angle/deg);
       evtac->SetPhotonCreationAngle(angle/deg);
-      evtac->SetTrackLengthFastSimulated(0);
       //if(angle/deg>20.4 && angle/deg <20.7)G4cout << "HERE" << G4endl;
-      if (angle/deg >20 && angle/deg <160) theTrack->SetTrackStatus(fStopAndKill);
     }
 
     if(0){                       //set to 1 to ignore generated photons
@@ -187,22 +154,15 @@ AIFIRA2023SimSteppingAction::AIFIRA2023SimSteppingAction()
       // G4cout << "Normal Surface = " << normal << G4endl;
       // G4cout << "angle_normal = " << angle_normal << G4endl;
 
-      //evtac->AddPhotonTrajectoryNStep();
-      //evtac->FillPhotonTrajectoryX(x);
-      //evtac->FillPhotonTrajectoryY(y);
-      //evtac->FillPhotonTrajectoryZ(z);
-
       if(endproc == "OpAbsorption")
       {
         if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ZnS") {evtac->CountBulkAbsZnS();}
-        if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Core_Fiber") {evtac->CountBulkAbsSc();}
-        if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Vacuum") {evtac->CountBulkAbsSc();}
+        if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator") {evtac->CountBulkAbsSc();}
         //G4cout << "Photon BulkAbsorbed" << G4endl;
         //G4cout << "N bulk abs Sc = " << evtac->GetBulkAbsSc() << G4endl;
         //G4cout << "N bulk abs ZnS = " << evtac->GetBulkAbsZnS() << G4endl;
         //evtac->FillPhotonTrajectoryNStep(evtac->GetPhotonTrajectoryNStep());
-        evtac->ClearPhotonTrajectoryNStep();
-        //evtac->FillPhotonFinalState(1);
+        evtac->FillPhotonFinalState(1);
         //evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
       }
 
@@ -214,31 +174,7 @@ AIFIRA2023SimSteppingAction::AIFIRA2023SimSteppingAction()
         //G4cout << "Number of scattering = " << ((ENLOpticalSimTrackInformation*) (aStep->GetTrack()->GetUserInformation()))->GetRayleigh() << G4endl;
       }
 
-      // If WLS -> Use this !!!
-      /*
-      else if (endproc == "OpWLS")
-      {
-      evtac->CountWLS();
-      my_dist_after = my_dist_after + aStep->GetTrack()->GetTrackLength()/mm;
-      //G4cout << "Count WLS true = " << info->GetWLSCount() << G4endl;
-      //G4cout << "Distance d = " << d << G4endl;
-
-      //{
-      if (info->GetWLSCount() == 0)
-      {
-      Length_Track = aStep->GetTrack()->GetTrackLength()/mm;
-      //G4cout << "Count WLS = " << info->GetWLSCount() << G4endl;
-    }
-
-    if (info->GetWLSCount() > 0)
-    {
-    Length_Track += aStep->GetTrack()->GetTrackLength()/mm;
-    //G4cout << "Count WLS = " << info->GetWLSCount() << G4endl;
-  }
-  //G4cout << "Track Length = " << aStep->GetTrack()->GetTrackLength()/mm << G4endl;
-  //G4cout << "Total Length Track (for different OpWLS) = " << Total_Length_Track << G4endl;
-}
-*/
+      
 
 else if(partname == "opticalphoton" && endproc != "Transportation" && endproc != "OpAbsorption" && endproc !="G4FSMP")
 G4cout << endproc << G4endl;
@@ -251,13 +187,18 @@ if(aStep->GetPostStepPoint()->GetStepStatus()==fGeomBoundary){
   switch(boundaryStatus){
     case Detection:
     {
+      //G4cout << "Photon detecté" << G4endl;
       evtac->CountDetected();
+      //G4cout << "N detecté = " << evtac->GetDetected() << G4endl;
       evtac->FillPhotonDetectorPositionX(x);
       evtac->FillPhotonDetectorPositionY(y);
       evtac->FillPhotonPositionZ(z);
       evtac->FillPhotonMomentumX(px);
       evtac->FillPhotonMomentumY(py);
       evtac->FillPhotonMomentumZ(pz);
+      //G4cout << "x = " << x << G4endl;
+      //G4cout << "y = " << y << G4endl;
+      //G4cout << "z = " << z << G4endl;
       //G4cout << "Px = " << px << G4endl;
       //G4cout << "Py = " << py << G4endl;
       //G4cout << "Pz = " << pz << G4endl;
@@ -267,40 +208,25 @@ if(aStep->GetPostStepPoint()->GetStepStatus()==fGeomBoundary){
       evtac->FillRayleigh(((AIFIRA2023SimTrackInformation*) (aStep->GetTrack()->GetUserInformation()))->GetRayleigh());
       evtac->FillTotalReflections(((AIFIRA2023SimTrackInformation*) (aStep->GetTrack()->GetUserInformation()))->GetTotalInternalReflections());
       evtac->FillWrapReflecions(((AIFIRA2023SimTrackInformation*)(aStep->GetTrack()->GetUserInformation()))->GetReflections());
-      evtac->FillPhotonTotalLength(aStep->GetTrack()->GetTrackLength()/mm + evtac->GetTrackLengthFastSimulated());
       evtac->FillFiberAngleDetection(angle/deg);
       evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
-      if(r >0.5)
-      {
-        //evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
-        //evtac->FillFiberAngleDetection(angle/deg);
-        //G4cout << "ICI " << G4endl;
-      }
+      
 
       //G4cout << "angle detection = " << angle/deg << G4endl;
       // G4cout << "Lamda = " << info->GetBirthLambda() << " nm " << G4endl;
-      // G4cout << "[STEP] Track Length fast simulated = " << evtac->GetTrackLengthFastSimulated() << G4endl;
-      // G4cout << "[STEP] Track Length = " << evtac->GetTrackLengthFastSimulated()+aStep->GetTrack()->GetTrackLength()/mm << G4endl;
-      //G4cout << "Photon detecté" << G4endl;
-      //G4cout << "N detecté = " << evtac->GetDetected() << G4endl;
-
-      evtac->FillPhotonTrajectoryNStep(evtac->GetPhotonTrajectoryNStep());
-      evtac->ClearPhotonTrajectoryNStep();
+      
       evtac->FillPhotonFinalState(4);
 
       break;
       case Absorption:    // used to get the number TRANSMITTED!!
 
-      //if (theTrack->GetNextVolume()->GetName()=="Photocathode")
-      if (theTrack->GetNextVolume()->GetName()=="CMOS")
+      if (theTrack->GetNextVolume()->GetName()=="Detector")
       {
         evtac->CountFailed();
         //G4cout << "Photon failed" << G4endl;
         //G4cout << "N failed = " << evtac->GetFailed() << G4endl;
 
-        //evtac->FillPhotonTrajectoryNStep(evtac->GetPhotonTrajectoryNStep());
-        //evtac->ClearPhotonTrajectoryNStep();
-        //evtac->FillPhotonFinalState(3);
+        evtac->FillPhotonFinalState(3);
         //evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
 
       }
@@ -309,9 +235,7 @@ if(aStep->GetPostStepPoint()->GetStepStatus()==fGeomBoundary){
         //G4cout << "Photon surface absorbed" << G4endl;
         //G4cout << "N absorbed = " << evtac->GetAbsorbed() << G4endl;
 
-        //evtac->FillPhotonTrajectoryNStep(evtac->GetPhotonTrajectoryNStep());
-        //evtac->ClearPhotonTrajectoryNStep();
-        //evtac->FillPhotonFinalState(0);
+        evtac->FillPhotonFinalState(0);
         //evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
       }
 
@@ -324,9 +248,7 @@ if(aStep->GetPostStepPoint()->GetStepStatus()==fGeomBoundary){
         //G4cout << "count escaped" << G4endl;
         //G4cout << "N escaped = " << evtac->GetEscaped() << G4endl;
 
-        //evtac->FillPhotonTrajectoryNStep(evtac->GetPhotonTrajectoryNStep());
-        //evtac->ClearPhotonTrajectoryNStep();
-        //evtac->FillPhotonFinalState(2);
+        evtac->FillPhotonFinalState(2);
         //evtac->FillFiberAngleCreation(evtac->GetPhotonCreationAngle());
       }
       break;
@@ -425,19 +347,23 @@ if (Parent_ID ==0 && StepNo==1)
 
 if (((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator") || (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ZnS") || (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Core_Fiber"))
 && ((aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator") || (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "ZnS") || (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Core_Fiber"))
-&& partname != "opticalphoton")
+&& partname == "proton")
 {
   evtac->AddTrackLength(aStep->GetTrack()->GetStepLength()/mm);
+  //G4cout << "Track Length = " << evtac->GetTotalTrackLength() << G4endl;
   evtac->AddEdepTP(aStep->GetTotalEnergyDeposit()/keV);
 }
 
 //Be careful here !!! If Zns in here, put ZnS. If not, put Scintillator or Core_Fiber!!!!
-if(Parent_ID ==0 && aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator" && evtac->GetTPPositionZ()==0)
+if(Parent_ID ==0 && aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator" && evtac->GetTPPositionZ()<0)
 {
   evtac->SetTPPositionX(x);
   evtac->SetTPPositionY(y);
   evtac->SetTPPositionZ(z);
   evtac->SetTPTime(aStep->GetPostStepPoint()->GetGlobalTime()/ns);
+  //G4cout << "x = " << x << G4endl;
+  //G4cout << "y = " << y << G4endl;
+  //G4cout << "z = " << z << G4endl;
 
   //if(x <-25){G4cout << "HERE X" << G4endl;}
   //if(y <-10){G4cout << "HERE Y" << G4endl;}
@@ -445,7 +371,6 @@ if(Parent_ID ==0 && aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() ==
 
 if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ZnS" && partname != "opticalphoton") {evtac->AddEdepZnS(aStep->GetTotalEnergyDeposit()/keV);}
 if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Scintillator" && partname != "opticalphoton") {evtac->AddEdepSc(aStep->GetTotalEnergyDeposit()/keV);}
-if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Core_Fiber" && partname != "opticalphoton") {evtac->AddEdepSc(aStep->GetTotalEnergyDeposit()/keV);}
 
 if(aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World") {theTrack->SetTrackStatus(fStopAndKill);}
 

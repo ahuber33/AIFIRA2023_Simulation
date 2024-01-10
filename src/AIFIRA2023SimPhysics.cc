@@ -108,38 +108,7 @@ void AIFIRA2023SimPhysics::ConstructProcess()
   particleList->ConstructProcess();
   raddecayList->ConstructProcess();
   ConstructOp();
-  AddParameterisation();
-  //AddIonGasModels();  // Be careful, use only for the TP!!! Process ionIoni not taken into account for neutral nucleus !!!
 
-}
-
-void AIFIRA2023SimPhysics::AddIonGasModels()
-{
-  G4EmConfigurator* em_config =
-  G4LossTableManager::Instance()->EmConfigurator();
-  auto particleIterator=GetParticleIterator();
-  particleIterator->reset();
-  while ((*particleIterator)())
-  {
-    G4ParticleDefinition* particle = particleIterator->value();
-    G4String partname = particle->GetParticleName();
-    if(partname == "alpha" || partname == "He3" || partname == "GenericIon") {
-      G4BraggIonGasModel* mod1 = new G4BraggIonGasModel();
-      G4BetheBlochIonGasModel* mod2 = new G4BetheBlochIonGasModel();
-      G4double eth = 2.*MeV*particle->GetPDGMass()/proton_mass_c2;
-      //G4double eth = 0.0001*eV;
-      //G4cout << "ETH = " << eth << G4endl;
-
-      // G4IonParametrisedLossModel* mod3 = new G4IonParametrisedLossModel();
-      // em_config->SetExtraEmModel(partname,"ionIoni",mod3,"Sc",0.0,100*TeV,new G4UniversalFluctuation());
-
-      em_config->SetExtraEmModel(partname,"ionIoni",mod1,"",0.0,eth,
-      new G4IonFluctuations());
-      em_config->SetExtraEmModel(partname,"ionIoni",mod2,"",eth,100*TeV,
-      new G4UniversalFluctuation());
-
-    }
-  }
 }
 
 
@@ -170,9 +139,9 @@ void AIFIRA2023SimPhysics::ConstructOp()
   theWLSProcess->SetVerboseLevel(0);
 
   //theScintillationProcess->SetScintillationYieldFactor(1.);
-  theScintillationProcess->SetTrackSecondariesFirst(true);
+  theScintillationProcess->SetTrackSecondariesFirst(false);
   //theQuenchingScintillationProcess->SetScintillationYieldFactor(1.);
-  theQuenchingScintillationProcess->SetTrackSecondariesFirst(true);
+  theQuenchingScintillationProcess->SetTrackSecondariesFirst(false);
 
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   theQuenchingScintillationProcess->AddSaturation(emSaturation);
@@ -218,31 +187,6 @@ void AIFIRA2023SimPhysics::ConstructOp()
   }
 }
 
-
-void AIFIRA2023SimPhysics::AddParameterisation() {
-
-  G4FastSimulationManagerProcess* fastSimProcess =
-   new G4FastSimulationManagerProcess("G4FSMP");
-
-  // Registers the fastSimProcess with all the particles as a discrete and
-  // continuous process (this works in all cases; in the case that parallel
-  // geometries are not used, as in this example, it would be enough to
-  // add it as a discrete process).
-   auto particleIterator=GetParticleIterator();
-   particleIterator->reset();
-  while ( (*particleIterator)() ) {
-  G4ParticleDefinition* particle = particleIterator->value();
-   G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->SetVerboseLevel(0);
-
-  if(particle->GetParticleName() == "opticalphoton")
-    //pmanager->AddDiscreteProcess( fastSimProcess );    // No parallel geometry
-    pmanager->AddProcess( fastSimProcess, -1, 0, 0 );  // General
-  }
-
-
-
-}
 
 void AIFIRA2023SimPhysics::SetCuts()
 {

@@ -59,61 +59,18 @@ private:
   // Logical Volumes
   G4LogicalVolume *LogicalWorld;
   G4LogicalVolume *LogicalHolder;
-  G4LogicalVolume *LogicalFibersHolder;
-  G4LogicalVolume *LogicalGM_LND;
   G4LogicalVolume *LogicalSc;
   G4LogicalVolume *LogicalZnS;
-  G4LogicalVolume *LogicalZnSLG;
-  G4LogicalVolume *LogicalTeflon;
-  G4LogicalVolume *LogicalMylar;
-  G4LogicalVolume *LogicalGlue;
   G4LogicalVolume *LogicalPM;
   G4LogicalVolume *LogicalPhotocathode;
-  G4LogicalVolume *LogicalLaBr3;
-  G4LogicalVolume *LogicalPMMA;
-  G4LogicalVolume *LogicalBoitierAlu;
-  G4LogicalVolume *LogicalEFPlates;
-  G4LogicalVolume *LogicalVolumeEFPlates;
-  G4LogicalVolume *LogicalMFPlates;
-  G4LogicalVolume *LogicalVolumeMFPlates;
-  G4LogicalVolume *LogicalPinhole;
-  G4LogicalVolume *LogicalCoreFiber;
-  G4LogicalVolume *LogicalInnerCladdingFiber;
-  G4LogicalVolume *LogicalOuterCladdingFiber;
-  G4LogicalVolume *LogicalFiber;
-  G4LogicalVolume *LogicalLens;
-  G4LogicalVolume *LogicalLens2;
-
 
   // Physical volumes
   G4VPhysicalVolume *PhysicalWorld;
   G4VPhysicalVolume *PhysicalHolder;
-  G4VPhysicalVolume *PhysicalFibersHolder;
-  G4VPhysicalVolume *PhysicalGM_LND;
   G4VPhysicalVolume *PhysicalSc;
   G4VPhysicalVolume *PhysicalZnS;
-  G4VPhysicalVolume *PhysicalZnSLG;
-  G4VPhysicalVolume *PhysicalTeflon;
-  G4VPhysicalVolume *PhysicalMylar;
-  G4VPhysicalVolume *PhysicalGlue;
   G4VPhysicalVolume *PhysicalPM;
   G4VPhysicalVolume *PhysicalPhotocathode;
-  G4VPhysicalVolume *PhysicalPMMA;
-  G4VPhysicalVolume *PhysicalBoitierAlu;
-  G4VPhysicalVolume *PhysicalEFPlates;
-  G4VPhysicalVolume *PhysicalVolumeEFPlates;
-  G4VPhysicalVolume *PhysicalMFPlates;
-  G4VPhysicalVolume *PhysicalVolumeMFPlates;
-  G4VPhysicalVolume *PhysicalPinhole;
-  G4VPhysicalVolume *PhysicalCoreFiber;
-  G4VPhysicalVolume *PhysicalInnerCladdingFiber;
-  G4VPhysicalVolume *PhysicalOuterCladdingFiber;
-  G4VPhysicalVolume *PhysicalCoreFiberBunch[1000000];
-  G4VPhysicalVolume *PhysicalInnerCladdingFiberBunch[1000000];
-  G4VPhysicalVolume *PhysicalOuterCladdingFiberBunch[1000000];
-  G4VPhysicalVolume *PhysicalLens;
-  G4VPhysicalVolume *PhysicalLens2;
-
 
   // Optical surfaces
   G4OpticalSurface *OpticalTeflon;
@@ -135,62 +92,16 @@ private:
   // G4LogicalSkinSurface *SSScintillateur;
 
   // Dimension values
-  G4double EF_Value;
-  G4double EF_Dist_between_plates;
-  G4double EF_Thickness_plates;
-  G4double EF_Length_plates;
-  G4double EF_Width_plates;
-  G4double MF_Value;
-  G4double MF_Dist_between_plates;
-  G4double MF_Thickness_plates;
-  G4double MF_Length_plates;
-  G4double MF_Width_plates;
-  G4double Dist_between_plates;
-  G4double Dist_EFPlates_Detector;
-  G4double Dist_pinhole_MFPlates;
-  G4double translation_pinhole;
   G4double ScintillatorThickness;
+  G4double AirGap;
   G4double ZnSThickness;
-  G4double ZnSLGThickness;
   G4double DetectorThickness;
-  G4double DetectorTranslation;
-  G4double LensTranslation;
-  G4double LensThickness;
-  G4double PinholeThickness;
-  G4double FiberLength;
-  G4double FiberWidth;
-  G4double FiberSpace;
-  G4double FiberCladdingRatio;
-  G4double FiberNumberPerLine;
-  G4double InnerCladdingFiberRadius;
-  G4double OuterCladdingFiberRadius;
-  G4double InnerCladdingFiberWidth;
-  G4int NbOfFibers;
-  G4double FiberSpacing;
-  G4double FiberWidthCore;
-  G4double FiberWidthCladding;
-  G4double FiberMultiCladding;
-  G4double FiberGeometry;
-  G4double WidthBunchFibers;
-  G4int ActivationG4FAST;
-
+  
   // Dimensions PLACEMENTS
-  G4double Z_Position_MFPlates;
-  G4double Z_Position_EFPlates;
   G4double Z_Position_ZnS;
   G4double Z_Position_Sc;
-  G4double Z_Position_ZnSLG;
   G4double Z_Position_Photocathode;
-  G4double Z_Position_Fiber;
-  G4double Z_Position_Lens;
-  // wrapping
-  G4double TeflonGap;
-  G4double TeflonThickness;
-  G4double MylarGap;
-  G4double MylarThickness;
-  // glue
-  G4double GlueThickness;
-
+  
 
 };
 #endif

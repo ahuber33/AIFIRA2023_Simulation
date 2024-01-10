@@ -19,8 +19,6 @@ protected:
   virtual void ConstructParticle();
   virtual void ConstructProcess();
   virtual void ConstructOp();
-  virtual void AddIonGasModels();
-  virtual void AddParameterisation();
   virtual void SetCuts();
 protected:
   //virtual void ConstructBosons();

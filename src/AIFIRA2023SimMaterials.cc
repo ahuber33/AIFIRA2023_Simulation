@@ -61,22 +61,6 @@ PMMA(0)
 			{
 				config_prop>>scintIndexconst;
 			}
-			if(variable == "scalingfactor_low")
-			{
-				config_prop>>scalingfactor_low;
-			}
-			if(variable == "scalingfactor_high")
-			{
-				config_prop>>scalingfactor_high;
-			}
-			if(variable == "pop_scalingfactor_low")
-			{
-				config_prop>>pop_scalingfactor_low;
-			}
-			if(variable == "pop_scalingfactor_high")
-			{
-				config_prop>>pop_scalingfactor_high;
-			}
 			if(variable == "lightyield")
 			{
 				config_prop>>lightyield;
@@ -84,18 +68,6 @@ PMMA(0)
 			if(variable == "lightyieldZnS")
 			{
 				config_prop>>lightyieldZnS;
-			}
-			if(variable == "lightyieldNoWaSH")
-			{
-				config_prop>>lightyieldNoWaSH;
-			}
-			if(variable == "paint_ref_coeff")
-			{
-				config_prop>>paint_ref_coeff;
-			}
-			if(variable == "mylar_ref_coeff")
-			{
-				config_prop>>mylar_ref_coeff;
 			}
 			else if(variable == "scintAbsorbconst")
 			{
@@ -1991,137 +1963,6 @@ void AIFIRA2023SimMaterials::Construct()
 	//ZnS->GetIonisation()->SetBirksConstant(0.03*mm/MeV); //0.126->base; 0.0872->article BiPO
 
 
-
-
-	//#######################################################################################################################################
-	//#######################################################################################################################################
-
-
-	// Start of definition NoWaSH scintillation
-	NoWaSH = new G4Material("NoWaSH", 0.852*g/cm3, 2);
-	NoWaSH->AddElement(elementC, 16);
-	NoWaSH->AddElement(elementH, 26);
-
-	NoWaSHMPT = new G4MaterialPropertiesTable();
-
-	// Read primary emission spectrum
-
-	std::ifstream ReadNoWaSH;
-
-	G4String NoWaSH_file = path+"LAB_spectrum_reverse.cfg";
-	std::vector<G4double> NoWaSH_Emission_Energy;
-	std::vector<G4double> NoWaSH_Emission_Ratio;
-
-	ReadNoWaSH.open(NoWaSH_file);
-	if(ReadNoWaSH.is_open()){
-		while(!ReadNoWaSH.eof()){
-			G4String filler;
-			ReadNoWaSH >> pWavelength >> filler >> ratio;
-			//G4cout << "Wavelength = " << 1240./pWavelength << " & emission = "<< ratio << G4endl;
-			NoWaSH_Emission_Energy.push_back((1240./pWavelength)*eV);         //convert wavelength to eV
-			NoWaSH_Emission_Ratio.push_back(ratio);
-		}
-	}
-	else
-	{
-		G4cout << "Error opening file: " << NoWaSH_file << G4endl;
-	}
-	ReadNoWaSH.close();
-
-	// Read primary bulk absorption
-
-	std::ifstream NoWaSHReadabsorb;
-	G4String NoWaSHReadabsorblength = path+"LAB_absorption_reverse.cfg";
-	std::vector<G4double> NoWaSH_Absorption_Energy;
-	std::vector<G4double> NoWaSH_Absorption_Long;
-
-	NoWaSHReadabsorb.open(NoWaSHReadabsorblength);
-	if (NoWaSHReadabsorb.is_open()){
-		while(!NoWaSHReadabsorb.eof()){
-			G4String filler;
-			NoWaSHReadabsorb >> pWavelength >> filler >> varabsorblength;
-			//G4cout << "Wavelength = " << pWavelength << " & absorption = "<< varabsorblength << G4endl;
-			NoWaSH_Absorption_Energy.push_back((1240./pWavelength)*eV);
-			NoWaSH_Absorption_Long.push_back(1.*varabsorblength*cm);
-		}
-	}
-	else
-
-	G4cout << "Error opening file: "<< NoWaSHReadabsorblength << G4endl;
-
-	NoWaSHReadabsorb.close();
-
-
-
-	// Read primary Rayleigh scattering
-	std::ifstream NoWaSHReadscatt;
-	G4String NoWaSHReadscattering = path+"LAB_absorption_reverse.cfg";
-	std::vector<G4double> NoWaSH_Scattering_Energy;
-	std::vector<G4double> NoWaSH_Scattering_Long;
-
-	NoWaSHReadscatt.open(NoWaSHReadscattering);
-	if (NoWaSHReadscatt.is_open()){
-		while(!NoWaSHReadscatt.eof()){
-			G4String filler;
-			NoWaSHReadscatt >> pWavelength >> filler >> varabsorblength;
-			//G4cout << "Wavelength = " << pWavelength << " & absorption = "<< varabsorblength << G4endl;
-			NoWaSH_Scattering_Energy.push_back((1240./pWavelength)*eV);
-			NoWaSH_Scattering_Long.push_back(2*mm);
-		}
-	}
-	else
-
-	G4cout << "Error opening file: "<< NoWaSHReadscattering << G4endl;
-
-	NoWaSHReadscatt.close();
-
-
-
-	std::ifstream NoWaSHRead_ref_index;
-	//G4String ref_index_emit = path+"PST_ref_index.dat";
-	G4String NoWaSHref_index_emit = path+"LaBr3_index_reverse.cfg";
-	std::vector<G4double> NoWaSH_Index_Energy;
-	std::vector<G4double> NoWaSH_Index_Value;
-
-	NoWaSHRead_ref_index.open(NoWaSHref_index_emit);
-	if(NoWaSHRead_ref_index.is_open()){
-		while(!NoWaSHRead_ref_index.eof()){
-			G4String filler;
-			NoWaSHRead_ref_index >> pWavelength >> filler >> indexvalue;
-			//ref_index_value[ref_index_Entries]=1.59;
-			NoWaSH_Index_Energy.push_back((1240/pWavelength)*eV);
-			//NoWaSH_Index_Value.push_back(indexvalue);
-			NoWaSH_Index_Value.push_back(1.48);
-		}
-	}
-	else
-	G4cout << "Error opening file: " << NoWaSHref_index_emit << G4endl;
-	NoWaSHRead_ref_index.close();
-
-
-	// Now apply the properties table
-	NoWaSHMPT->AddProperty("RINDEX", NoWaSH_Index_Energy, NoWaSH_Index_Value);
-	NoWaSHMPT->AddProperty("ABSLENGTH", NoWaSH_Absorption_Energy, NoWaSH_Absorption_Long);    // the bulk absorption spectrum
-	NoWaSHMPT->AddProperty("RAYLEIGH", NoWaSH_Scattering_Energy, NoWaSH_Scattering_Long);    // the bulk absorption spectrum
-	NoWaSHMPT->AddProperty("SCINTILLATIONCOMPONENT1", NoWaSH_Emission_Energy, NoWaSH_Emission_Ratio);
-	//scintMPT->AddProperty("SCINTILLATIONCOMPONENT2",scintEnergy,scintEmit,scintEntries);  // if slow component
-
-	//G4double efficiency = 1.0;
-	//NoWaSHMPT->AddConstProperty("EFFICIENCY",efficiency);
-
-	NoWaSHMPT->AddConstProperty("SCINTILLATIONYIELD",lightyieldNoWaSH/MeV);
-	//NoWaSHMPT->AddConstProperty("ALPHASCINTILLATIONYIELD",0.01*lightyield/MeV);
-	G4double NoWaSHRes = 1;
-	NoWaSHMPT->AddConstProperty("RESOLUTIONSCALE",NoWaSHRes);
-	G4double NoWaSHFastconst = 4*ns;
-	NoWaSHMPT->AddConstProperty("SCINTILLATIONTIMECONSTANT1",NoWaSHFastconst);
-	G4double NoWaSHSlowconst = 17*ns;
-	NoWaSHMPT->AddConstProperty("SCINTILLATIONTIMECONSTANT2",NoWaSHSlowconst); //if slow component
-	NoWaSHMPT->AddConstProperty("SCINTILLATIONYIELD1",1.0);
-	NoWaSHMPT->AddConstProperty("SCINTILLATIONYIELD2",0.0);
-
-	NoWaSH->SetMaterialPropertiesTable(NoWaSHMPT);
-	//NoWaSH->GetIonisation()->SetBirksConstant(0.03*mm/MeV); //0.126->base; 0.0872->article BiPO
 
 	//#######################################################################################################################################
 	//#######################################################################################################################################

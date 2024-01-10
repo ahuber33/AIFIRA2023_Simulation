@@ -46,17 +46,9 @@ void AIFIRA2023SimEventAction::BeginOfEventAction(const G4Event* evt){
   StatsOptical.Failed = 0;
   //StatsOptical.WLS = 0;
   StatsOptical.Detected = 0;
-  StatsOptical.ExitLightPositionX.clear();
-  StatsOptical.ExitLightPositionY.clear();
-  StatsOptical.LensPositionX.clear();
-  StatsOptical.LensPositionY.clear();
   StatsOptical.DetectorPositionX.clear();
   StatsOptical.DetectorPositionY.clear();
   StatsOptical.PositionZ.clear();
-  StatsOptical.PhotonTrajectoryX.clear();
-  StatsOptical.PhotonTrajectoryY.clear();
-  StatsOptical.PhotonTrajectoryZ.clear();
-  StatsOptical.PhotonTrajectoryNStep.clear();
   StatsOptical.MomentumX.clear();
   StatsOptical.MomentumY.clear();
   StatsOptical.MomentumZ.clear();
@@ -69,9 +61,6 @@ void AIFIRA2023SimEventAction::BeginOfEventAction(const G4Event* evt){
   StatsOptical.TotalLength.clear();
   StatsOptical.Angle_creation.clear();
   StatsOptical.Angle_detection.clear();
-  TrackLengthFastSimulated=0;
-  PhotonTrajectoryNStep=0;
-  Air_Index=-1;
 
   StatsTP.ParticuleID=0;
   StatsTP.E_start=0;
@@ -79,7 +68,7 @@ void AIFIRA2023SimEventAction::BeginOfEventAction(const G4Event* evt){
   StatsTP.Charge=0;
   StatsTP.PositionX =0;
   StatsTP.PositionY =0;
-  StatsTP.PositionZ =0;
+  StatsTP.PositionZ =-300;
   StatsTP.Time =0;
   StatsTP.TotalLength =0;
   StatsTP.InteractionDepth =0;
@@ -109,7 +98,7 @@ void AIFIRA2023SimEventAction::EndOfEventAction(const G4Event* evt){
   G4float Deposit = StatsOptical.DepositSc +  StatsOptical.DepositZnS;
 
 
-  if (Scintillation <0)
+  if (Scintillation >0)
   {
     efficiency = 100*(1.0*StatsOptical.Detected)/(1.0*Generated);
     Absfrac = 100*(1.0*StatsOptical.Absorbed)/(1.0*Generated);
@@ -126,11 +115,11 @@ void AIFIRA2023SimEventAction::EndOfEventAction(const G4Event* evt){
     G4cout << "Incident Energy:                                 " << StatsOptical.IncidentE << " keV " << G4endl;
     G4cout << "Energy Deposited TOTAL:                          " << Deposit   << " keV " << G4endl;
     //G4cout << "     in ZnS:                                 " << StatsOptical.DepositZnS   << " keV " << G4endl;
-    G4cout << "     in core Fiber :                             " << StatsOptical.DepositSc   << " keV " << G4endl;
+    G4cout << "     in Scintillator :                             " << StatsOptical.DepositSc   << " keV " << G4endl;
     // G4cout << "Photons Generated in ZnS:                    " << GeneratedZnS     << G4endl;
     // G4cout << "     from Scintillation :                    " << StatsOptical.ScintillationZnS << "   (" << (float(StatsOptical.ScintillationZnS))/(float(GeneratedZnS))*100 << " %)"     << G4endl;
     // G4cout << "     from Cerenkov :                         " << StatsOptical.CerenkovZnS     << "    (" << (float(StatsOptical.CerenkovZnS))/(float(GeneratedZnS))*100 << " %)"     << G4endl;
-    G4cout << "Photons Generated in Core Fiber:                 " << GeneratedSc     << G4endl;
+    G4cout << "Photons Generated in Scintillator:                 " << GeneratedSc     << G4endl;
     G4cout << "     from Scintillation :                        " << StatsOptical.ScintillationSc << "     (" << (float(StatsOptical.ScintillationSc))/(float(GeneratedSc))*100 << " %)"     << G4endl;
     G4cout << "     from Cerenkov :                             " << StatsOptical.CerenkovSc     << "      (" << (float(StatsOptical.CerenkovSc))/(float(GeneratedSc))*100 << " %)"     << G4endl;
     // G4cout << "TOTAL Photons Generated:                     " << Generated      << G4endl;
