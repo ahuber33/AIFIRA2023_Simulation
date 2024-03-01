@@ -9,8 +9,8 @@ void Reconstruction_Traj_Lentille()
   float xE[NbinsX], exE[NbinsX], yE[NbinsX], eyE[NbinsX];
   float xNph[NbinsX], exNph[NbinsX], yNph[NbinsX], eyNph[NbinsX];
 
-  float distance = 300;
-  string filename = "Config1_He2+.root";
+  float distance = 0;
+  string filename = "2.5MeV_0.1mm_EJ262_NOGapAir_radius_0.1mm_LY_870.root";
   //string filename = "proton_EJ262_5mm_lens_75mm_300mm_CMOS_Exp_30MeV.root";
   string filename_out_Nph = "Etudes_lentilles/Graph_Nph_proton_ZnS_0.2mm_5mm_lens_75mm_300mm_CMOS_Exp_30MeV.root";
   string filename_out_Resolution = "Etudes_lentilles/Graph_Resolution_proton_ZnS_0.2mm_5mm_lens_75mm_300mm_CMOS_Exp_30MeV.root";
