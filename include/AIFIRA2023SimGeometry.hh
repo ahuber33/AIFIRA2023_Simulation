@@ -3,7 +3,7 @@
 //// Copyright: 2022 (C) Projet RATP - ENL [LP2IB] - CELIA
 
 #ifndef AIFIRA2023SimGeometry_h
-#define AIFIRA2023SimGeometry_h  1
+#define AIFIRA2023SimGeometry_h 1
 
 #include "G4MaterialPropertiesTable.hh"
 
@@ -17,15 +17,15 @@ class G4VPhysicalVolume;
 #include "G4LogicalSkinSurface.hh"
 #include "CLHEP/Units/SystemOfUnits.h"
 
-class  AIFIRA2023SimGeometry:  public G4VUserDetectorConstruction
+class AIFIRA2023SimGeometry : public G4VUserDetectorConstruction
 {
 public:
   AIFIRA2023SimGeometry();
   ~AIFIRA2023SimGeometry();
 
 public:
-  G4VPhysicalVolume* Construct();
-  G4LogicalVolume* GetLWorld() {return LogicalWorld;}
+  G4VPhysicalVolume *Construct();
+  G4LogicalVolume *GetLWorld() { return LogicalWorld; }
 
 private:
   static const G4String path_bin;
@@ -63,6 +63,7 @@ private:
   G4LogicalVolume *LogicalZnS;
   G4LogicalVolume *LogicalPM;
   G4LogicalVolume *LogicalPhotocathode;
+  G4LogicalVolume *LogicalGlass;
 
   // Physical volumes
   G4VPhysicalVolume *PhysicalWorld;
@@ -71,11 +72,13 @@ private:
   G4VPhysicalVolume *PhysicalZnS;
   G4VPhysicalVolume *PhysicalPM;
   G4VPhysicalVolume *PhysicalPhotocathode;
+  G4VPhysicalVolume *PhysicalGlass;
 
   // Optical surfaces
   G4OpticalSurface *OpticalTeflon;
   G4OpticalSurface *OpticalMylar;
   G4OpticalSurface *OpticalPMT;
+  G4OpticalSurface *OpticalGlass;
   G4OpticalSurface *OpticalAlu;
 
   // Material Properties Table
@@ -83,12 +86,14 @@ private:
   G4MaterialPropertiesTable *MylarMPT;
   G4MaterialPropertiesTable *AluMPT;
   G4MaterialPropertiesTable *PMT_MPT;
+  G4MaterialPropertiesTable *Glass_MPT;
 
   // // Skin surfaces
   G4LogicalSkinSurface *SSTeflon;
   G4LogicalSkinSurface *SSMylar;
   G4LogicalSkinSurface *SSAlu;
   G4LogicalSkinSurface *SSPhotocathode;
+  G4LogicalSkinSurface *SSGlass;
   // G4LogicalSkinSurface *SSScintillateur;
 
   // Dimension values
@@ -96,12 +101,13 @@ private:
   G4double AirGap;
   G4double ZnSThickness;
   G4double DetectorThickness;
-  
+  G4double WorkingDistance;
+  G4double GlassThickness;
+
   // Dimensions PLACEMENTS
   G4double Z_Position_ZnS;
   G4double Z_Position_Sc;
   G4double Z_Position_Photocathode;
-  
-
+  G4double Z_Position_Glass;
 };
 #endif

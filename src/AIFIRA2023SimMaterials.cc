@@ -491,7 +491,7 @@ void AIFIRA2023SimMaterials::Construct()
 	//scintillator->GetIonisation()->SetBirksConstant(0.0872*mm/MeV); //0.126->base; 0.0872->article BiPO
 	//scintillator->GetIonisation()->SetBirksConstant(0.25*mm/MeV); // Choisi pour validation modÃ¨le avec LY 11737!!!
 	//scintillator->GetIonisation()->SetBirksConstant(0.22*mm/MeV);
-	//scintillator->GetIonisation()->SetBirksConstant(0.01*mm/MeV); // TEST ELECTRONS !!! => Maxime
+	EJ212->GetIonisation()->SetBirksConstant(0.35*mm/MeV); // TEST ELECTRONS !!! => Maxime
 
 
 
@@ -804,7 +804,7 @@ void AIFIRA2023SimMaterials::Construct()
 	EJ262MPT->AddConstProperty("SCINTILLATIONYIELD2",0.0);
 
 	EJ262->SetMaterialPropertiesTable(EJ262MPT);
-	//EJ262->GetIonisation()->SetBirksConstant(0.0872*mm/MeV); //0.126->base; 0.0872->article BiPO
+	//EJ262->GetIonisation()->SetBirksConstant(0.126*mm/MeV); //0.126->base; 0.0872->article BiPO
 
 
 
@@ -1960,7 +1960,7 @@ void AIFIRA2023SimMaterials::Construct()
 	ZnSMPT->AddConstProperty("SCINTILLATIONYIELD2",0.0);
 
 	ZnS->SetMaterialPropertiesTable(ZnSMPT);
-	//ZnS->GetIonisation()->SetBirksConstant(0.03*mm/MeV); //0.126->base; 0.0872->article BiPO
+	ZnS->GetIonisation()->SetBirksConstant(0.35*mm/MeV); //0.126->base; 0.0872->article BiPO
 
 
 

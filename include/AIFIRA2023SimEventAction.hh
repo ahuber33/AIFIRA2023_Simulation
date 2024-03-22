@@ -123,6 +123,12 @@ public:
   void SetPhotonCreationAngle(G4float e){Photon_creation_angle=e;}
   float GetPhotonCreationAngle(){return Photon_creation_angle;}
   void FillFiberAngleDetection(G4float e){StatsOptical.Angle_detection.push_back(e);}
+  void SetPhotonExitMomentumX(G4float e){exit_px=e;}
+  void SetPhotonExitMomentumY(G4float e){exit_py=e;}
+  void SetPhotonExitMomentumZ(G4float e){exit_pz=e;}
+  float GetPhotonExitMomentumX(){return exit_px;}
+  float GetPhotonExitMomentumY(){return exit_py;}
+  float GetPhotonExitMomentumZ(){return exit_pz;}
   
 
   //Functions for TP Tree
@@ -156,6 +162,9 @@ private:
   RunTallyTP StatsTP;
   G4String suffixe;
   float Photon_creation_angle;
+  float exit_px;
+  float exit_py;
+  float exit_pz;
 
 
 

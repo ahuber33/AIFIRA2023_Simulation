@@ -39,7 +39,8 @@ public:
   G4LogicalVolume *GetSc();
   G4LogicalVolume *GetZnS();
   G4LogicalVolume *GetPhotocathode();
-  G4LogicalVolume *GetRoundPhotocathode();
+  G4LogicalVolume *GetRoundObjective();
+  G4LogicalVolume *GetRoundGlassObjective();
 
 
   // Functions that can be called to return various scint dimensions
@@ -51,6 +52,8 @@ public:
   G4double GetScintillatorThickness(){return ScintillatorThickness;}
   G4double GetZnSThickness(){return ZnSThickness;}
   G4double GetDetectorThickness(){return DetectorThickness;}
+  G4double GetWorkingDistance(){return WorkingDistance;}
+  G4double GetGlassThickness(){return GlassThickness;}
 
 private:
 
@@ -74,6 +77,8 @@ private:
   G4double DetectorLength;
   G4double DetectorWidth;
   G4double DetectorThickness;
+  G4double WorkingDistance;
+  G4double GlassThickness;
   // Physical Dimensions
   // wrapping
   G4double AirGap;

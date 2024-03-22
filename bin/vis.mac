@@ -54,9 +54,9 @@
 /gps/pos/type Plane
 /gps/pos/centre 0.0 0.0 -300.0 mm
 /gps/pos/shape Circle
-/gps/pos/radius 1 mm
+/gps/pos/radius 5 um
 
-/gps/energy 1.2 MeV
+/gps/energy 1. MeV
 /gps/direction 0.0 0.0 1.0
 #/gps/ang/type cos
 #/gps/ang/rot1 -1 0 0
@@ -74,4 +74,4 @@
 #/grdm/nucleusLimits 60 60 27 27
 
 
-/run/beamOn 100
+/run/beamOn 1

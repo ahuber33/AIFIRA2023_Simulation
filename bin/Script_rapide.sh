@@ -7,6 +7,6 @@ do
     do
 	sleep 10
     done
-    ./AIFIRA2023Sim b_${i} 500 vrml.mac &
+    ./AIFIRA2023Sim a_${i} 1000 vrml.mac &
     sleep 10
     done

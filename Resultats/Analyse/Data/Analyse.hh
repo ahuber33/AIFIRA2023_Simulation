@@ -181,12 +181,12 @@ void ComputeTH2Mean(TH2D *Main, float N_files)
 
 void BdF_Analyse(string path, int N_total_files)
 {
-    string filename = path + "1711.txt";
+    string filename = path + "882.txt";
 
     BdF = Plot_from_CSV(filename.c_str(), "BdF");
 
     float N_BdF_files = 1;
-    for (int i = 1712; i <= N_total_files; i++)
+    for (int i = 883; i <= N_total_files; i++)
     {
         filename = path + to_string(i) + ".txt";
         string name = "BdF_" + to_string(i);
@@ -379,7 +379,7 @@ void Draw_Results(int Rebin)
     fitX->SetParameter(2, fit1X->GetParameter(2));
     fitX->SetParLimits(2, 3, 50);
     fitX->SetParameter(3, fit1X->GetParameter(0) / 10);
-    fitX->SetParLimits(3, fit1X->GetParameter(0) / 1000, fit1X->GetParameter(0) * 10);
+    fitX->SetParLimits(3, fit1X->GetParameter(0) / 1000, fit1X->GetParameter(0) * 0.1);
     fitX->FixParameter(4, fit1X->GetParameter(1));
     fitX->SetParameter(5, fit1X->GetParameter(2) * 10);
     fitX->SetParLimits(5, fit1X->GetParameter(2)*1, 1000);
@@ -455,16 +455,16 @@ void Draw_Results(int Rebin)
     projY_true->SetLineColor(kCyan);
     //projY_true->Rebin(Rebin);
     fit1Y->SetParameter(1, BinYMax*Rebin);
-    fit1X->SetParLimits(1, (BinYMax-10)*Rebin, (BinYMax+10)*Rebin);
-    fit1Y->SetParameter(2, 5);
+    fit1Y->SetParLimits(1, (BinYMax-10)*Rebin, (BinYMax+10)*Rebin);
+    fit1Y->SetParameter(2, 30);
     fit1Y->SetParLimits(2, 1, 50);
     projY_true->Fit("fit1Y", "N");
     fitY->SetParameter(0, fit1Y->GetParameter(0));
     fitY->FixParameter(1, fit1Y->GetParameter(1));
     fitY->SetParameter(2, fit1Y->GetParameter(2));
-    fitY->SetParLimits(2, 3, 50);
+    fitY->SetParLimits(2, 3, 25);
     fitY->SetParameter(3, fit1Y->GetParameter(0) / 100);
-    fitY->SetParLimits(3, fit1Y->GetParameter(0) / 10000, fit1Y->GetParameter(0) * 10);
+    fitY->SetParLimits(3, fit1Y->GetParameter(0) / 10000, fit1Y->GetParameter(0) * 0.1);
     fitY->FixParameter(4, fit1Y->GetParameter(1));
     fitY->SetParameter(5, fit1Y->GetParameter(2) * 10);
     fitY->SetParLimits(5, fit1Y->GetParameter(2), 1000);
@@ -537,20 +537,28 @@ void Draw_Results(int Rebin)
     Signal_true->SetNameTitle("True Signal", "True Signal");
     //Signal_true->Rebin2D(Rebin, Rebin);
     fit->SetParameter(0, fitX->GetParameter(0)/1);
+    fit->SetParLimits(0, 1, 1e5);
     fit->FixParameter(1, fitX->GetParameter(1));
-    fit->FixParameter(2, fitX->GetParameter(2));
+    fit->SetParameter(2, fitX->GetParameter(2));
+    fit->SetParLimits(2, 0, 50);
     fit->SetParameter(3, fitX->GetParameter(3)/1);
+    fit->SetParLimits(3, 0, 1e5);
     fit->FixParameter(4, fitX->GetParameter(4));
     fit->FixParameter(5, fitX->GetParameter(5));
+    fit->SetParLimits(5, 0, 500);
     //fit->FixParameter(6, fitX->GetParameter(0));
     fit->SetParameter(6, fitY->GetParameter(0/1));
-    fit->FixParameter(7, fitY->GetParameter(1));
+    fit->SetParLimits(6, 0, 1e5);
+    fit->SetParameter(7, fitY->GetParameter(1));
     fit->FixParameter(8, fitY->GetParameter(2));
+    fit->SetParLimits(8, 0, 50);
     fit->SetParameter(9, fitY->GetParameter(3)/1);
+    fit->SetParLimits(9, 0, 1e5);
     fit->FixParameter(10, fitY->GetParameter(4));
     fit->FixParameter(11, fitY->GetParameter(5));
+    fit->SetParLimits(11, 0, 500);
 
-    Signal_true->Fit("fit", "QNR");
+    Signal_true->Fit("fit", "NR");
     fit->SetMaximum(pow(2, BitCodage));
     fit->SetMinimum(0);
     // fit->SetNpy(400);
@@ -734,7 +742,14 @@ void Analyse_Degradation(string path, int start, int end)
         Chi2ndf[temp] = fit->GetChisquare() / fit->GetNDF();
         Time[temp] = 0.084 * temp * 50;
         E_Time[temp] = 0.084 / 2;
+
+        cout << "Integral Fit Signal = " << Integral_Fit_Signal[temp] << endl;  
+        cout << "SigmaX = " << Sigma_X[temp] << endl;  
+        cout << "SigmaY = " << Sigma_Y[temp] << endl;  
+        cout << "Chi2/ndf = " << Chi2ndf[temp] << endl;  
+
         temp++;
+
     }
 
     new TCanvas;

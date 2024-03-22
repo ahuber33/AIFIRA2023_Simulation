@@ -159,6 +159,8 @@ ScintillatorThickness = theScint->GetScintillatorThickness();
 ZnSThickness = theScint->GetZnSThickness();
 DetectorThickness = theScint->GetDetectorThickness();
 AirGap = theScint->GetAirGap();
+GlassThickness = theScint->GetGlassThickness();
+WorkingDistance = theScint->GetWorkingDistance();
 
 //#########################
 // DEFINE GEOMETRY VOLUMES#
@@ -185,12 +187,12 @@ LogicalHolder = new G4LogicalVolume(s_holder,Vacuum,"logical_holder",0,0,0); //R
 //*********************** *********
 //Simply calls functions from Scintillator() class
 LogicalSc = theScint->GetSc();
-//  LogicalZnS = theScint->GetZnS();
+LogicalZnS = theScint->GetZnS();
 
 
 // Set colors of various block materials
 LogicalSc->SetVisAttributes(cyan);
-//LogicalZnS->SetVisAttributes(green);
+LogicalZnS->SetVisAttributes(green);
 //LogicalZnSLG->SetVisAttributes(gray);
 LogicalHolder->SetVisAttributes(invis);
 
@@ -291,19 +293,21 @@ OpticalMylar->SetMaterialPropertiesTable(MylarMPT);
 //***********************
 
 // Build the PMT glass structure from PMT class
-LogicalPhotocathode = theScint->GetPhotocathode(); // Call function for PMT glass
-//LogicalPhotocathode = theScint->GetRoundPhotocathode(); // Call function for PMT glass
+//LogicalPhotocathode = theScint->GetPhotocathode(); // Call function for PMT glass
+LogicalPhotocathode = theScint->GetRoundObjective(); // Call function for PMT glass
 LogicalPhotocathode->SetVisAttributes(orange); // Set photocathode color to orange
+LogicalGlass = theScint->GetRoundGlassObjective(); // Call function for PMT glass
+LogicalGlass->SetVisAttributes(red); // Set photocathode color to orange
 
 
 // Define PMT properties
 G4double indexconst = 1.49; // Index currently set to constant for PMT glass
-G4double reflectconst = 0.;
+G4double reflectconst = 0.09;
 std::ifstream ReadPMT;
 //G4String PMTfile = path+"QE_ham_GA0124.txt";
 //G4String PMTfile = path+"9102B_ET_reverse.txt";
-//G4String PMTfile = path+"ORCA_ENL_reverse.cfg";
-G4String PMTfile = path+"CMOS_S11684_reverse.cfg";
+G4String PMTfile = path+"ORCA_ENL_reverse.cfg";
+//G4String PMTfile = path+"CMOS_S11684_reverse.cfg";
 std::vector<G4double> Photocathode_Energy;
 std::vector<G4double> Photocathode_Value;
 std::vector<G4double> Photocathode_Index;
@@ -344,9 +348,11 @@ OpticalPMT->SetMaterialPropertiesTable(PMT_MPT);
 SSPhotocathode = new G4LogicalSkinSurface("SSVikuiti",LogicalPhotocathode,OpticalPMT);
 
 
+
 Z_Position_ZnS =  ZnSThickness/2;    
 Z_Position_Sc = ZnSThickness + ScintillatorThickness/2;
-Z_Position_Photocathode = ZnSThickness + ScintillatorThickness + AirGap + DetectorThickness/2;
+Z_Position_Glass = ZnSThickness + ScintillatorThickness + WorkingDistance + GlassThickness/2;
+Z_Position_Photocathode = Z_Position_Glass + GlassThickness/2 + DetectorThickness/2;
     
 
 
@@ -359,14 +365,19 @@ Z_Position_Photocathode = ZnSThickness + ScintillatorThickness + AirGap + Detect
 PhysicalHolder = new G4PVPlacement(G4Transform3D(DontRotate,G4ThreeVector(0, 0, 0)),LogicalHolder, "Vacuum", LogicalWorld,false,0);
 
 
-// PhysicalZnS = new G4PVPlacement(G4Transform3D
-//   (DontRotate,G4ThreeVector((60-10)*mm, (30-12.1)*mm, Z_Position_ZnS)), // Set at origin as basis of everything else
-//   LogicalZnS,"ZnS",
-//   LogicalHolder,false,0);
+PhysicalZnS = new G4PVPlacement(G4Transform3D
+  (DontRotate,G4ThreeVector(0*mm, 0*mm, Z_Position_ZnS)), // Set at origin as basis of everything else
+  LogicalZnS,"ZnS",
+  LogicalHolder,false,0);
 
 PhysicalSc = new G4PVPlacement(G4Transform3D
 (DontRotate,G4ThreeVector(0*mm, 0*mm, Z_Position_Sc)), // Set at origin as basis of everything else
 LogicalSc,"Scintillator",
+LogicalHolder,false,0);
+
+PhysicalGlass = new G4PVPlacement(G4Transform3D
+(DontRotate,G4ThreeVector(0*mm, 0*mm, Z_Position_Glass)), // Set at origin as basis of everything else
+LogicalGlass,"Glass",
 LogicalHolder,false,0);
 
 PhysicalPhotocathode = new G4PVPlacement(G4Transform3D

@@ -81,6 +81,14 @@ Geometry::Geometry(G4String buildfile){
         config >> value >> unit;
         AirGap = value*G4UnitDefinition::GetValueOf(unit);
       }
+      else if(variable == "GlassThickness"){
+        config >> value >> unit;
+        GlassThickness = value*G4UnitDefinition::GetValueOf(unit);
+      }
+      else if(variable == "WorkingDistance"){
+        config >> value >> unit;
+        WorkingDistance = value*G4UnitDefinition::GetValueOf(unit);
+      }
     }
   }
   config.close();
@@ -96,6 +104,8 @@ Geometry::Geometry(G4String buildfile){
   << "\n DetectorWidth = " << DetectorWidth
   << "\n DetectorThickness = " << DetectorThickness
   << "\n Air gap = " << AirGap
+  << "\n Glass Thickness = " << GlassThickness
+  << "\n WorkingDistance = " << WorkingDistance
   << "\n " << G4endl;
 
 }
@@ -110,7 +120,7 @@ Geometry::~Geometry(){
 
 G4LogicalVolume *Geometry::GetSc(){
 
-  Material = scintProp->GetMaterial("EJ262");
+  Material = scintProp->GetMaterial("EJ212");
   //Material = scintProp->GetMaterial("YAG");
   //Material = scintProp->GetMaterial("ZnS");
 
@@ -153,14 +163,27 @@ G4LogicalVolume *Geometry::GetPhotocathode(){
 }
 
 
-G4LogicalVolume *Geometry::GetRoundPhotocathode(){
+G4LogicalVolume *Geometry::GetRoundObjective(){
 
   Material = scintProp->GetMaterial("Silicium");
 
   G4Tubs *Tubs = new G4Tubs   ("Tubs",             //its name
-  0., (75/2)*mm, (0.1/2)*mm, 0, 360*deg);    //its size
+  0., (11.5/2)*mm, (DetectorThickness/2)*mm, 0, 360*deg);    //its size
 
   LogicalVolume = new G4LogicalVolume(Tubs, Material, "Photocathode",0,0,0);
+
+  return LogicalVolume;
+}
+
+
+G4LogicalVolume *Geometry::GetRoundGlassObjective(){
+
+  Material = scintProp->GetMaterial("bs_glass");
+
+  G4Tubs *Tubs = new G4Tubs   ("Tubs",             //its name
+  0., (11.5/2)*mm, (GlassThickness/2)*mm, 0, 360*deg);    //its size
+
+  LogicalVolume = new G4LogicalVolume(Tubs, Material, "Glass",0,0,0);
 
   return LogicalVolume;
 }

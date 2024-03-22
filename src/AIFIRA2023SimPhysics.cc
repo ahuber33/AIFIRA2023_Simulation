@@ -3,7 +3,7 @@
 //// Copyright: 2022 (C) Projet RATP - ENL [LP2IB] - CELIA
 
 #include "AIFIRA2023SimPhysics.hh"
-//#include "G4MuNuclearInteraction.hh"
+// #include "G4MuNuclearInteraction.hh"
 #include "G4KokoulinMuonNuclearXS.hh"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -53,34 +53,32 @@
 #include "G4BetheBlochModel.hh"
 #include "G4FastSimulationManagerProcess.hh"
 
-
 using namespace CLHEP;
 
 // Taken from N06 and LXe examples in GEANT4
 
-AIFIRA2023SimPhysics::AIFIRA2023SimPhysics():  G4VModularPhysicsList()
+AIFIRA2023SimPhysics::AIFIRA2023SimPhysics() : G4VModularPhysicsList()
 {
   // Here used the default cut value you have typed in
-  //defaultCutValue = 0.001*mm; //0.001
-  defaultCutValue = 1*um; //0.001
-  //was 0.5*mm
+  // defaultCutValue = 0.001*mm; //0.001
+  defaultCutValue = 1 * um; // 0.001
+  // was 0.5*mm
 
   SetVerboseLevel(1);
 
-  //default physics
+  // default physics
   particleList = new G4DecayPhysics();
 
-  //default physics
+  // default physics
   raddecayList = new G4RadioactiveDecayPhysics();
 
   // EM physics
   emPhysicsList = new G4EmStandardPhysics_option3();
-  //emPhysicsList = new G4EmStandardPhysics();
-
-
+  // emPhysicsList = new G4EmStandardPhysics();
 }
 
-AIFIRA2023SimPhysics::~AIFIRA2023SimPhysics(){
+AIFIRA2023SimPhysics::~AIFIRA2023SimPhysics()
+{
   delete raddecayList;
   delete emPhysicsList;
 }
@@ -91,44 +89,41 @@ void AIFIRA2023SimPhysics::ConstructParticle()
   particleList->ConstructParticle();
 
   //  ions
-  //G4IonConstructor iConstructor;
-  //iConstructor.ConstructParticle();
+  // G4IonConstructor iConstructor;
+  // iConstructor.ConstructParticle();
 }
-
 
 void AIFIRA2023SimPhysics::ConstructProcess()
 {
   // Transportation, electromagnetic and general processes
 
   AddTransportation();
-  //ConstructEM();
-  //ConstructGeneral();
-  // Electromagnetic physics list
+  // ConstructEM();
+  // ConstructGeneral();
+  //  Electromagnetic physics list
   emPhysicsList->ConstructProcess();
   particleList->ConstructProcess();
   raddecayList->ConstructProcess();
   ConstructOp();
-
 }
-
 
 void AIFIRA2023SimPhysics::ConstructOp()
 {
   G4Cerenkov *theCerenkovProcess = new G4Cerenkov("Cerenkov");
   G4Scintillation *theScintillationProcess = new G4Scintillation("Scintillation");
   G4Scintillation *theQuenchingScintillationProcess = new G4Scintillation("Scintillation");
-  G4OpAbsorption *theAbsorptionProcess     = new G4OpAbsorption();
+  G4OpAbsorption *theAbsorptionProcess = new G4OpAbsorption();
   G4OpRayleigh *theRayleighScatteringProcess = new G4OpRayleigh();
-  G4OpBoundaryProcess *theBoundaryProcess  = new G4OpBoundaryProcess();
+  G4OpBoundaryProcess *theBoundaryProcess = new G4OpBoundaryProcess();
   G4OpWLS *theWLSProcess = new G4OpWLS();
 
-  G4int verbosity=0;
+  G4int verbosity = 0;
 
-  //theCerenkovProcess->SetMaxNumPhotonsPerStep(1);
-  //theCerenkovProcess->SetMaxBetaChangePerStep(1);
+  // theCerenkovProcess->SetMaxNumPhotonsPerStep(1);
+  // theCerenkovProcess->SetMaxBetaChangePerStep(1);
   theCerenkovProcess->SetTrackSecondariesFirst(false);
   theCerenkovProcess->SetVerboseLevel(verbosity);
-  //theCerenkovProcess->DumpPhysicsTable();
+  // theCerenkovProcess->DumpPhysicsTable();
 
   theScintillationProcess->SetVerboseLevel(verbosity);
   theQuenchingScintillationProcess->SetVerboseLevel(verbosity);
@@ -138,18 +133,18 @@ void AIFIRA2023SimPhysics::ConstructOp()
   theBoundaryProcess->SetVerboseLevel(verbosity);
   theWLSProcess->SetVerboseLevel(0);
 
-  //theScintillationProcess->SetScintillationYieldFactor(1.);
+  // theScintillationProcess->SetScintillationYieldFactor(1.);
   theScintillationProcess->SetTrackSecondariesFirst(false);
-  //theQuenchingScintillationProcess->SetScintillationYieldFactor(1.);
+  // theQuenchingScintillationProcess->SetScintillationYieldFactor(1.);
   theQuenchingScintillationProcess->SetTrackSecondariesFirst(false);
 
-  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
+  G4EmSaturation *emSaturation = G4LossTableManager::Instance()->EmSaturation();
   theQuenchingScintillationProcess->AddSaturation(emSaturation);
 
-  //G4OpticalSurfaceModel themodel = unified;
-  //theBoundaryProcess->SetModel(themodel);
+  // G4OpticalSurfaceModel themodel = unified;
+  // theBoundaryProcess->SetModel(themodel);
 
-  G4ProcessManager * pManager = 0;
+  G4ProcessManager *pManager = 0;
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
   pManager->AddDiscreteProcess(theAbsorptionProcess);
   pManager->AddDiscreteProcess(theRayleighScatteringProcess);
@@ -158,41 +153,48 @@ void AIFIRA2023SimPhysics::ConstructOp()
 
   auto theParticleIterator = GetParticleIterator();
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
+  while ((*theParticleIterator)())
+  {
+    G4ParticleDefinition *particle = theParticleIterator->value();
+    G4ProcessManager *pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
     if (theCerenkovProcess->IsApplicable(*particle))
-      {
-    	pmanager->AddProcess(theCerenkovProcess);
-    	pmanager->SetProcessOrdering(theCerenkovProcess, idxPostStep);
-      }
+    {
+      pmanager->AddProcess(theCerenkovProcess);
+      pmanager->SetProcessOrdering(theCerenkovProcess, idxPostStep);
+    }
 
-    if(particle->GetParticleName() == "e-")
+    if (theScintillationProcess->IsApplicable(*particle))
     {
       pmanager->AddProcess(theQuenchingScintillationProcess);
       pmanager->SetProcessOrderingToLast(theQuenchingScintillationProcess, idxAtRest);
       pmanager->SetProcessOrderingToLast(theQuenchingScintillationProcess, idxPostStep);
     }
 
-    else if (theScintillationProcess->IsApplicable(*particle))
-    {
-      pmanager->AddProcess(theScintillationProcess);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
-    }
+    // VERSION PRECEDENTE !!!!
+    //  if(particle->GetParticleName() == "e-")
+    //  {
+    //    pmanager->AddProcess(theQuenchingScintillationProcess);
+    //    pmanager->SetProcessOrderingToLast(theQuenchingScintillationProcess, idxAtRest);
+    //    pmanager->SetProcessOrderingToLast(theQuenchingScintillationProcess, idxPostStep);
+    //  }
 
-
+    // else if (theScintillationProcess->IsApplicable(*particle))
+    // {
+    //   pmanager->AddProcess(theScintillationProcess);
+    //   pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
+    //   pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
+    // }
   }
 }
-
 
 void AIFIRA2023SimPhysics::SetCuts()
 {
   // defaultCutValue you have typed in is used
 
-  if (verboseLevel >1){
+  if (verboseLevel > 1)
+  {
     G4cout << "opticalPhysics::SetCuts:";
   }
   SetCutsWithDefault();
